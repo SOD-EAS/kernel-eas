@@ -303,8 +303,12 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -O2 -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS = -O2 
+
+# Optimization for Kryo
+KBUILD_CFLAGS	+= -mcpu=cortex-a57
+
 
 ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
 HOSTCFLAGS  += -Wno-unused-value -Wno-unused-parameter \
@@ -629,9 +633,9 @@ ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 else
 ifdef CONFIG_PROFILE_ALL_BRANCHES
-KBUILD_CFLAGS	+= -O2 -finline-functions -funswitch-loops -fpredictive-commoning -fgcse-after-reload 
+KBUILD_CFLAGS	+= -O2
 else
-KBUILD_CFLAGS   += -O2 -finline-functions
+KBUILD_CFLAGS   += -O2
 endif
 endif
 # Needed to unbreak GCC 7.x and above
